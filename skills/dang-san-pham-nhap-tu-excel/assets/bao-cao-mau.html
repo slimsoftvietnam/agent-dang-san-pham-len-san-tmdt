@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Báo cáo lưu nháp sản phẩm</title>
+<!-- Mẫu báo cáo: thay các chỗ {{...}} và nhân bản khối .card cho từng sản phẩm. Escape dữ liệu Excel. Không chèn token/cookie. -->
+<style>
+:root{--bg:#f6f5fb;--card:#fff;--ink:#1f2330;--mute:#6b7185;--line:#e6e4f0;--brand:#6d4aff;--ok:#12a150;--warn:#e8890c;--bad:#d93a3a;--demo:#fff4e0}
+@media (prefers-color-scheme:dark){:root{--bg:#14151c;--card:#1d1f29;--ink:#eceef6;--mute:#9aa0b6;--line:#2c2f3d;--demo:#3a2d14}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Segoe UI",system-ui,Arial,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 18px 60px}
+header{background:linear-gradient(135deg,#6d4aff,#9b7bff);color:#fff;border-radius:18px;padding:26px 28px}
+header h1{margin:0 0 6px;font-size:26px}
+header p{margin:0;opacity:.92;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.stat b{display:block;font-size:28px}
+.stat span{color:var(--mute);font-size:13px}
+.demo{background:var(--demo);border-left:5px solid var(--warn);border-radius:10px;padding:12px 16px;margin:14px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0;display:grid;grid-template-columns:150px 1fr 120px;gap:18px;align-items:start}
+.card img{width:150px;height:150px;object-fit:cover;border-radius:12px;background:var(--line)}
+.card h3{margin:0 0 4px;font-size:18px}
+.meta{color:var(--mute);font-size:13px}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;color:#fff;margin-right:6px}
+.b-ok{background:var(--ok)}.b-warn{background:var(--warn)}.b-bad{background:var(--bad)}.b-demo{background:#8a6d1d}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 16px;margin:10px 0;font-size:13.5px}
+.grid i{font-style:normal;color:var(--ok);font-weight:700}.grid i.x{color:var(--bad)}
+.score{text-align:center}
+/* vòng điểm: đặt --p là điểm (0-100); xanh khi > 90 */
+.ring{--p:92;--c:var(--ok);width:104px;height:104px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;
+ background:conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0)}
+.ring.low{--c:var(--warn)}.ring.bad{--c:var(--bad)}
+.ring span{width:80px;height:80px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:26px;font-weight:700}
+.score small{color:var(--mute)}
+h2{margin:30px 0 8px;font-size:19px}
+ul.todo{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px 14px 36px}
+a{color:var(--brand)}
+@media (max-width:760px){.card{grid-template-columns:1fr}.card img{width:100%;height:200px}.score{text-align:left}.ring{margin:0 0 6px}}
+@media print{body{background:#fff}.card,.stat{break-inside:avoid}}
+</style>
+</head>
+<body><div class="wrap">
+<header>
+  <h1>Báo cáo lưu nháp {{SÀN}}</h1>
+  <p>{{Cửa hàng}} · File nguồn: {{file.xlsx}} · {{thời điểm}} · Phương thức: {{giao diện / API}}</p>
+</header>
+
+<div class="stats">
+  <div class="stat"><b>{{n}}</b><span>Sản phẩm xử lý</span></div>
+  <div class="stat"><b>{{n}}</b><span>Đã lưu nháp</span></div>
+  <div class="stat"><b>{{n}}</b><span>Điểm nội dung &gt; 90</span></div>
+  <div class="stat"><b>{{n}}</b><span>Lỗi / chưa đạt</span></div>
+</div>
+
+<div class="demo"><b>DEMO – không sẵn sàng bán.</b> {{Liệt kê dữ liệu giả định: ảnh, giá, thương hiệu, bảo hành…}} Điền đủ trường bắt buộc không bảo đảm sàn phê duyệt.</div>
+
+<!-- Nhân bản khối này cho từng sản phẩm -->
+<section class="card">
+  <img src="{{URL ảnh}}" alt="{{tên}}">
+  <div>
+    <h3>{{Tên sản phẩm}}</h3>
+    <div class="meta">Mã: {{ma_san_pham}} · SKU: {{sku}} · Dòng nguồn: {{n}} · ID nháp: <a href="{{liên kết quản trị}}">{{id}}</a></div>
+    <p style="margin:8px 0"><span class="badge b-ok">Nháp ✓</span><span class="badge b-demo">DEMO</span><span class="badge b-ok">Mở bán: tắt</span></p>
+    <div class="grid">
+      <div><i>✓</i> Ảnh sản phẩm ({{n}} ảnh)</div><div><i>✓</i> Tên</div><div><i>✓</i> Danh mục</div>
+      <div><i>✓</i> Thương hiệu</div><div><i>✓</i> Giá {{giá}} ₫</div><div><i>✓</i> Kho {{n}}</div>
+      <div><i>✓</i> Khối lượng {{kg}} kg</div><div><i>✓</i> Kích thước {{d×r×c}} cm</div><div><i>✓</i> Mô tả</div>
+      <div><i class="x">✗</i> {{trường còn thiếu, nếu có}}</div>
+    </div>
+    <div class="meta">Nguồn ảnh: {{liên kết + giấy phép}}</div>
+  </div>
+  <div class="score">
+    <div class="ring" style="--p:{{điểm}}"><span>{{điểm}}</span></div>
+    <small>Điểm nội dung<br>trước: {{x}} → sau: {{y}}</small>
+  </div>
+</section>
+
+<h2>Điểm còn mơ hồ</h2>
+<ul class="todo"><li>{{Thuộc tính AI tự gợi ý chưa xác minh…}}</li></ul>
+
+<h2>Việc người duyệt cần làm</h2>
+<ul class="todo">
+  <li>Thay dữ liệu DEMO bằng dữ liệu hàng thật.</li>
+  <li>Kiểm tra thuộc tính do AI của sàn tự điền.</li>
+  <li>Tự đặt tồn kho, bật Mở bán và bấm Gửi đi khi sẵn sàng (skill không tự xuất bản).</li>
+</ul>
+</div></body></html>

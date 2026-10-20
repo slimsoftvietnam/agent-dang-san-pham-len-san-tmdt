@@ -1,0 +1,7 @@
+# Mô-đun TikTok Shop
+
+Trạng thái: mô-đun tách riêng, **chưa chuẩn hóa theo cửa hàng/thị trường/danh mục cụ thể**. Dùng [Partner Center](https://partner.tiktokshop.com/) của đúng thị trường; không mượn biểu mẫu Lazada hoặc Shopee. [Changelog sản phẩm](https://partner.tiktokshop.com/docv2/page/r1wchdjn) nêu khả năng tạo sản phẩm trạng thái draft, nhưng phải xác minh API version, phạm vi quyền, payload và kết quả đọc lại cho tài khoản thực tế trước khi dùng.
+
+1. Xác nhận thị trường/cửa hàng, quyền và SKU. Lấy yêu cầu danh mục/thuộc tính, điều kiện đăng, ảnh, brand, giá/kho, vận chuyển, hàng nguy hiểm, chứng nhận và trường phụ thuộc theo tài liệu/API đang hỗ trợ; các điều kiện này thay đổi theo thị trường. Không dùng endpoint Listing Schema đã nghỉ hoạt động (thông báo [retired](https://partner.tiktokshop.com/docv2/page/new-endpoint-listing-schema)).
+2. Kiểm tra chế độ `draft` của Create Product API với phiên bản hiện hành và cách truy vấn trạng thái sau ghi. Nếu thiếu quyền hoặc không xác minh được nháp an toàn, khảo sát Seller Center và chỉ dùng nút lưu nháp. Không tạo sản phẩm bằng API nếu có thể tự chuyển sang xét duyệt/bán.
+3. Kiểm kê đủ dấu sao, thuộc tính bắt buộc theo điều kiện và giới hạn nội dung/ảnh; tối ưu SEO theo nguồn thật. Cho người dùng xem trước và duyệt lô. Sau khi lưu, mở lại để xác nhận dữ liệu bắt buộc, SKU và trạng thái nháp; lỗi hoặc trạng thái mơ hồ thì dừng.
